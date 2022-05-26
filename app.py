@@ -2,14 +2,13 @@ import csv
 import copy
 import argparse
 import itertools
-import queue
 import threading
 
 import cv2 as cv
 import numpy as np
 import mediapipe as mp
 
-from tts import TTSThread
+from utils.tts import TTSThread
 from utils import CvFpsCalc
 from model import KeyPointClassifier
 
@@ -150,7 +149,7 @@ def main():
     cap.release()
     cv.destroyAllWindows()
 
-    q.put('~exit~')
+    tts.stop()
 
 
 def select_mode(key, mode):
