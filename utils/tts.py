@@ -7,6 +7,7 @@ class TTSThread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
         self.daemon = True
+        self.running = True
         self.start()
         self.text = ''
 
@@ -17,13 +18,14 @@ class TTSThread(threading.Thread):
         tts_engine = pyttsx3.init()
         tts_engine.startLoop(False)
         last = ''
-        while True:
+        while self.running:
             if self.text != last:
                 last = self.text
-                if self.text == "~exit~":
-                    break
                 tts_engine.say(self.text)
             else:
                 tts_engine.iterate()
 
         tts_engine.endLoop()
+
+    def stop(self):
+        self.running = False
