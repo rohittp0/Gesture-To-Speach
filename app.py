@@ -2,17 +2,15 @@ import csv
 import copy
 import argparse
 import itertools
-import threading
 
 import cv2 as cv
 import numpy as np
 import mediapipe as mp
 
-from utils.tts import TTSThread
 from utils import CvFpsCalc
 from model import KeyPointClassifier
 
-import pyttsx3
+from playsound import playsound
 
 
 def get_args():
@@ -52,10 +50,7 @@ def main():
     use_brect = True
     previous_label = ''
 
-    tts = TTSThread()
-
-    engine = pyttsx3.init(driverName='sapi5')
-    threading.Thread(target=engine.startLoop).start()
+    # tts = TTSThread()
 
     # Camera preparation ###############################################################
     cap = cv.VideoCapture(cap_device)
@@ -137,7 +132,7 @@ def main():
 
                 # Speech output
                 if previous_label != label:
-                    tts.say(text=label)
+                    playsound(f'audios/{label}.mp3', block=False)
                     previous_label = label
 
         # debug_image = draw_point_history(debug_image, point_history)
@@ -148,8 +143,6 @@ def main():
 
     cap.release()
     cv.destroyAllWindows()
-
-    tts.stop()
 
 
 def select_mode(key, mode):
